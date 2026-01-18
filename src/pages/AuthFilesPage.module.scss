@@ -455,6 +455,21 @@
   }
 }
 
+.fileCardDisabled {
+  opacity: 0.75;
+  background-color: var(--bg-secondary);
+  border-style: dashed;
+
+  .typeBadge {
+    filter: grayscale(0.8);
+    opacity: 0.8;
+  }
+
+  .fileName {
+    color: var(--text-secondary);
+  }
+}
+
 .cardHeader {
   display: flex;
   align-items: center;
@@ -603,6 +618,20 @@
   justify-content: flex-end;
   margin-top: auto;
   padding-top: $spacing-sm;
+}
+
+.statusToggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-right: auto; // Push other actions to the right
+  padding-left: 2px; // Visual alignment
+
+  span {
+    font-size: 12px;
+    color: var(--text-secondary);
+    font-weight: 500;
+  }
 }
 
 .iconButton:global(.btn.btn-sm) {

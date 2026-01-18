@@ -506,6 +506,23 @@ export function AuthFilesPage() {
     event.target.value = '';
   };
 
+  // 切换禁用/启用状态
+  const handleStatusChange = async (item: AuthFileItem, disabled: boolean) => {
+    try {
+      await authFilesApi.updateStatus(item.name, disabled);
+      setFiles((prev) => prev.map((f) => (f.name === item.name ? { ...f, disabled } : f)));
+      showNotification(
+        t('auth_files.status_update_success', {
+          status: disabled ? t('auth_files.status_disabled') : t('auth_files.status_enabled'),
+        }),
+        'success'
+      );
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : '';
+      showNotification(`${t('auth_files.status_update_failed')}: ${errorMessage}`, 'error');
+    }
+  };
+
   // 删除单个文件
   const handleDelete = async (name: string) => {
     if (!window.confirm(`${t('auth_files.delete_confirm')} "${name}" ?`)) return;
@@ -541,9 +558,7 @@ export function AuthFilesPage() {
         setFiles((prev) => prev.filter((file) => isRuntimeOnlyAuthFile(file)));
       } else {
         // 删除筛选类型的文件
-        const filesToDelete = files.filter(
-          (f) => f.type === filter && !isRuntimeOnlyAuthFile(f)
-        );
+        const filesToDelete = files.filter((f) => f.type === filter && !isRuntimeOnlyAuthFile(f));
 
         if (filesToDelete.length === 0) {
           showNotification(t('auth_files.delete_filtered_none', { type: typeLabel }), 'info');
@@ -936,16 +951,17 @@ export function AuthFilesPage() {
     const isAistudio = (item.type || '').toLowerCase() === 'aistudio';
     const showModelsButton = !isRuntimeOnly || isAistudio;
     const typeColor = getTypeColor(item.type || 'unknown');
+    const cardClassName = `${styles.fileCard} ${item.disabled ? styles.fileCardDisabled : ''}`;
 
     return (
-      <div key={item.name} className={styles.fileCard}>
+      <div key={item.name} className={cardClassName}>
         <div className={styles.cardHeader}>
           <span
             className={styles.typeBadge}
             style={{
               backgroundColor: typeColor.bg,
               color: typeColor.text,
-              ...(typeColor.border ? { border: typeColor.border } : {})
+              ...(typeColor.border ? { border: typeColor.border } : {}),
             }}
           >
             {getTypeLabel(item.type || 'unknown')}
@@ -954,8 +970,12 @@ export function AuthFilesPage() {
         </div>
 
         <div className={styles.cardMeta}>
-          <span>{t('auth_files.file_size')}: {item.size ? formatFileSize(item.size) : '-'}</span>
-          <span>{t('auth_files.file_modified')}: {formatModified(item)}</span>
+          <span>
+            {t('auth_files.file_size')}: {item.size ? formatFileSize(item.size) : '-'}
+          </span>
+          <span>
+            {t('auth_files.file_modified')}: {formatModified(item)}
+          </span>
         </div>
 
         <div className={styles.cardStats}>
@@ -971,6 +991,16 @@ export function AuthFilesPage() {
         {renderStatusBar(item)}
 
         <div className={styles.cardActions}>
+          <div className={styles.statusToggle}>
+            <span>
+              {item.disabled ? t('auth_files.status_disabled') : t('auth_files.status_enabled')}
+            </span>
+            <ToggleSwitch
+              checked={!item.disabled}
+              onChange={(enabled) => handleStatusChange(item, !enabled)}
+              disabled={disableControls || deleting === item.name}
+            />
+          </div>
           {showModelsButton && (
             <Button
               variant="secondary"

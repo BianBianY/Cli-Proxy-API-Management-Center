@@ -54,6 +54,9 @@ export const authFilesApi = {
 
   deleteFile: (name: string) => apiClient.delete(`/auth-files?name=${encodeURIComponent(name)}`),
 
+  updateStatus: (name: string, disabled: boolean) =>
+    apiClient.patch('/auth-files/status', { name, disabled }),
+
   deleteAll: () => apiClient.delete('/auth-files', { params: { all: true } }),
 
   downloadText: async (name: string): Promise<string> => {
