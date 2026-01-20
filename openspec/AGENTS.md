@@ -288,7 +288,7 @@ Example for RENAMED:
 
 ## Language and Communication
 
-Default to **简体中文** for all OpenSpec artifacts and interaction, including `proposal.md`, `design.md`, `tasks.md`, and spec/spec-delta `spec.md` files.
+所有 OpenSpec 的产物和交互，包括 `proposal.md`、`design.md`、`tasks.md`，以及 spec/spec-delta 下的 `spec.md` 文件，都默认使用 **简体中文**。
 
 For tool compatibility, keep only OpenSpec structural tokens/headings in English:
 - Requirement/Scenario headings: `### Requirement:`, `#### Scenario:`
