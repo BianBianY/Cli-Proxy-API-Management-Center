@@ -129,7 +129,13 @@ const headerIcons = {
         </clipPath>
       </defs>
       <circle cx="12" cy="12" r="4" />
-      <circle cx="12" cy="12" r="4" clipPath="url(#mainLayoutAutoThemeSunLeftHalf)" fill="currentColor" />
+      <circle
+        cx="12"
+        cy="12"
+        r="4"
+        clipPath="url(#mainLayoutAutoThemeSunLeftHalf)"
+        fill="currentColor"
+      />
       <path d="M12 2v2" />
       <path d="M12 20v2" />
       <path d="M4.93 4.93l1.41 1.41" />
@@ -345,7 +351,6 @@ export function MainLayout() {
     });
   }, [fetchConfig]);
 
-
   const statusClass =
     connectionStatus === 'connected'
       ? 'success'
@@ -357,13 +362,13 @@ export function MainLayout() {
 
   const navItems = [
     { path: '/', label: t('nav.dashboard'), icon: sidebarIcons.dashboard },
-    { path: '/settings', label: t('nav.basic_settings'), icon: sidebarIcons.settings },
-    { path: '/api-keys', label: t('nav.api_keys'), icon: sidebarIcons.apiKeys },
-    { path: '/ai-providers', label: t('nav.ai_providers'), icon: sidebarIcons.aiProviders },
-    { path: '/auth-files', label: t('nav.auth_files'), icon: sidebarIcons.authFiles },
     { path: '/oauth', label: t('nav.oauth', { defaultValue: 'OAuth' }), icon: sidebarIcons.oauth },
+    { path: '/auth-files', label: t('nav.auth_files'), icon: sidebarIcons.authFiles },
+    { path: '/ai-providers', label: t('nav.ai_providers'), icon: sidebarIcons.aiProviders },
     { path: '/quota', label: t('nav.quota_management'), icon: sidebarIcons.quota },
     { path: '/usage', label: t('nav.usage_stats'), icon: sidebarIcons.usage },
+    { path: '/api-keys', label: t('nav.api_keys'), icon: sidebarIcons.apiKeys },
+    { path: '/settings', label: t('nav.basic_settings'), icon: sidebarIcons.settings },
     { path: '/config', label: t('nav.config_management'), icon: sidebarIcons.config },
     ...(config?.loggingToFile
       ? [{ path: '/logs', label: t('nav.logs'), icon: sidebarIcons.logs }]
@@ -387,7 +392,7 @@ export function MainLayout() {
     clearCache();
     const results = await Promise.allSettled([
       fetchConfig(undefined, true),
-      triggerHeaderRefresh()
+      triggerHeaderRefresh(),
     ]);
     const rejected = results.find((result) => result.status === 'rejected');
     if (rejected && rejected.status === 'rejected') {
