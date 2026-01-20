@@ -1,5 +1,6 @@
 import { Navigate, useRoutes, type Location } from 'react-router-dom';
 import { DashboardPage } from '@/pages/DashboardPage';
+import { AccountsPage } from '@/pages/Accounts';
 import { SettingsPage } from '@/pages/SettingsPage';
 import { ApiKeysPage } from '@/pages/ApiKeysPage';
 import { AiProvidersPage } from '@/pages/AiProvidersPage';
@@ -14,6 +15,7 @@ import { SystemPage } from '@/pages/SystemPage';
 const mainRoutes = [
   { path: '/', element: <DashboardPage /> },
   { path: '/dashboard', element: <DashboardPage /> },
+  { path: '/accounts', element: <AccountsPage /> },
   { path: '/settings', element: <SettingsPage /> },
   { path: '/api-keys', element: <ApiKeysPage /> },
   { path: '/ai-providers', element: <AiProvidersPage /> },

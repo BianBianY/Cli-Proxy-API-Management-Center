@@ -20,6 +20,7 @@ import {
   IconFileText,
   IconInfo,
   IconKey,
+  IconUser,
   IconLayoutDashboard,
   IconScrollText,
   IconSettings,
@@ -40,6 +41,7 @@ import { triggerHeaderRefresh } from '@/hooks/useHeaderRefresh';
 
 const sidebarIcons: Record<string, ReactNode> = {
   dashboard: <IconLayoutDashboard size={18} />,
+  accounts: <IconUser size={18} />,
   settings: <IconSlidersHorizontal size={18} />,
   apiKeys: <IconKey size={18} />,
   aiProviders: <IconBot size={18} />,
@@ -365,6 +367,11 @@ export function MainLayout() {
     { path: '/oauth', label: t('nav.oauth', { defaultValue: 'OAuth' }), icon: sidebarIcons.oauth },
     { path: '/auth-files', label: t('nav.auth_files'), icon: sidebarIcons.authFiles },
     { path: '/ai-providers', label: t('nav.ai_providers'), icon: sidebarIcons.aiProviders },
+    {
+      path: '/accounts',
+      label: t('nav.accounts', { defaultValue: 'Accounts' }),
+      icon: sidebarIcons.accounts,
+    },
     { path: '/quota', label: t('nav.quota_management'), icon: sidebarIcons.quota },
     { path: '/usage', label: t('nav.usage_stats'), icon: sidebarIcons.usage },
     { path: '/api-keys', label: t('nav.api_keys'), icon: sidebarIcons.apiKeys },
