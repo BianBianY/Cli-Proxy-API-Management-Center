@@ -1,8 +1,7 @@
-# accounts-page Specification
+# accounts-page Specification (Delta)
 
-## Purpose
-TBD - created by archiving change add-accounts-page. Update Purpose after archive.
-## Requirements
+## MODIFIED Requirements
+
 ### Requirement: 账户页面访问
 系统 SHALL 提供一个专用的账户管理页面，可从主导航访问，并在页面顶部显示统计概览信息。
 
@@ -62,6 +61,8 @@ TBD - created by archiving change add-accounts-page. Update Purpose after archiv
 - **AND THEN** 系统更新配置以反映此更改
 - **AND THEN** 概览统计区的启用/停用数量同步更新
 
+## ADDED Requirements
+
 ### Requirement: 统计数据实时刷新
 系统 SHALL 在用户操作（启用/停用）后自动更新概览统计区的数字，无需手动刷新页面。
 
@@ -109,4 +110,3 @@ TBD - created by archiving change add-accounts-page. Update Purpose after archiv
 - **WHEN** 用户打开账户页面
 - **THEN** 概览统计区显示为 2 列网格
 - **AND THEN** 认证文件和服务商卡片垂直堆叠显示
-

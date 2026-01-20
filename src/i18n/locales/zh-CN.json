@@ -95,7 +95,31 @@
     "usage_stats": "使用统计",
     "config_management": "配置管理",
     "logs": "日志查看",
-    "system_info": "中心信息"
+    "system_info": "中心信息",
+    "accounts": "账户管理"
+  },
+  "accounts": {
+    "description": "在此处集中管理您的认证文件和 API 提供商。",
+    "auth_files_title": "认证文件",
+    "providers_title": "API 服务商",
+    "stats": {
+      "total_auth_files": "认证文件总数",
+      "total_providers": "服务商配置",
+      "enabled": "已启用",
+      "disabled": "已停用"
+    },
+    "auth_file": {
+      "provider": "提供商",
+      "auth_index": "认证索引",
+      "runtime_only": "运行时"
+    },
+    "provider": {
+      "prefix": "前缀",
+      "proxy_url": "代理",
+      "models_count": "模型别名",
+      "excluded_count": "排除模型",
+      "headers_count": "自定义头"
+    }
   },
   "dashboard": {
     "title": "仪表盘",

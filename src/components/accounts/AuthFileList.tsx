@@ -5,11 +5,15 @@ import { ToggleSwitch } from '@/components/ui/ToggleSwitch';
 import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
 import { authFilesApi } from '@/services/api';
 import { useNotificationStore, useAuthStore } from '@/stores';
-import type { AuthFileItem } from '@/types';
+import type { AuthFileItem, AuthFileType } from '@/types';
 import { formatFileSize } from '@/utils/format';
 import styles from './Accounts.module.scss';
 
-export function AuthFileList() {
+interface AuthFileListProps {
+  filterType?: AuthFileType | 'all';
+}
+
+export function AuthFileList({ filterType = 'all' }: AuthFileListProps) {
   const { t } = useTranslation();
   const { showNotification } = useNotificationStore();
   const connectionStatus = useAuthStore((state) => state.connectionStatus);
@@ -22,7 +26,7 @@ export function AuthFileList() {
     try {
       const data = await authFilesApi.list();
       setFiles(data?.files || []);
-    } catch (err: any) {
+    } catch {
       showNotification(t('notification.refresh_failed'), 'error');
     } finally {
       setLoading(false);
@@ -45,7 +49,7 @@ export function AuthFileList() {
         }),
         'success'
       );
-    } catch (err: any) {
+    } catch {
       showNotification(t('auth_files.status_update_failed'), 'error');
     }
   };
@@ -60,23 +64,59 @@ export function AuthFileList() {
     );
   }
 
+  // Get type badge class name
+  const getTypeBadgeClass = (type?: string) => {
+    if (!type) return styles.unknown;
+    const typeKey = type.replace('-', '');
+    return styles[typeKey] || styles.unknown;
+  };
+
+  // Filter files by type
+  const filteredFiles = filterType === 'all'
+    ? files
+    : files.filter(f => f.type === filterType);
+
   return (
     <Card
       title={t('accounts.auth_files_title', { defaultValue: '认证文件' })}
       extra={<button className={styles.refreshBtn} onClick={loadFiles}>{t('common.refresh')}</button>}
     >
       <div className={styles.listContainer}>
-        {files.length === 0 ? (
-          <div className={styles.emptyText}>{t('auth_files.empty_title')}</div>
+        {filteredFiles.length === 0 ? (
+          <div className={styles.emptyText}>
+            {files.length === 0
+              ? t('auth_files.empty_title')
+              : t('auth_files.search_empty_title', { defaultValue: '没有匹配的配置文件' })}
+          </div>
         ) : (
-          files.map((file) => (
+          filteredFiles.map((file) => (
             <div key={file.name} className={styles.listItem}>
               <div className={styles.itemInfo}>
-                <div className={styles.itemName}>{file.name}</div>
+                <div className={styles.itemName}>
+                  {file.name}
+                  {file.type && (
+                    <span className={`${styles.typeBadge} ${getTypeBadgeClass(file.type)}`}>
+                      {file.type}
+                    </span>
+                  )}
+                  {file.runtimeOnly && (
+                    <span className={styles.runtimeBadge}>
+                      {t('accounts.auth_file.runtime_only', { defaultValue: '运行时' })}
+                    </span>
+                  )}
+                </div>
                 <div className={styles.itemMeta}>
-                  <span>{file.type || 'unknown'}</span>
+                  {file.provider && <span>{t('accounts.auth_file.provider', { defaultValue: '提供商' })}: {file.provider}</span>}
                   {file.size && <span> • {formatFileSize(file.size)}</span>}
                 </div>
+                {(file.authIndex !== undefined && file.authIndex !== null) && (
+                  <div className={styles.itemDetails}>
+                    <div className={styles.itemDetailRow}>
+                      <strong>{t('accounts.auth_file.auth_index', { defaultValue: '认证索引' })}:</strong>
+                      <span>{file.authIndex}</span>
+                    </div>
+                  </div>
+                )}
               </div>
               <div className={styles.itemAction}>
                 <ToggleSwitch

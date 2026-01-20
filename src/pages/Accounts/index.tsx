@@ -1,10 +1,18 @@
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { AuthFileList } from '@/components/accounts/AuthFileList';
 import { ProviderList } from '@/components/accounts/ProviderList';
+import { AccountsStatsGrid } from '@/components/accounts/AccountsStatsGrid';
+import { TypeFilterTags } from '@/components/accounts/TypeFilterTags';
+import { useAccountsData } from '@/components/accounts/hooks/useAccountsData';
+import type { AuthFileType } from '@/types';
 import styles from '@/components/accounts/Accounts.module.scss';
 
 export function AccountsPage() {
   const { t } = useTranslation();
+  const [selectedType, setSelectedType] = useState<AuthFileType | 'all'>('all');
+
+  const { stats, loading } = useAccountsData(selectedType);
 
   return (
     <div className={styles.container}>
@@ -15,9 +23,24 @@ export function AccountsPage() {
         </p>
       </div>
 
+      {/* Statistics Grid */}
+      <AccountsStatsGrid
+        totalAuthFiles={stats.totalAuthFiles}
+        totalProviders={stats.totalProviders}
+        totalEnabled={stats.totalEnabled}
+        totalDisabled={stats.totalDisabled}
+        loading={loading}
+      />
+
+      {/* Type Filter Tags */}
+      <TypeFilterTags
+        selectedType={selectedType}
+        onTypeChange={setSelectedType}
+      />
+
       <div className={styles.content}>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '1.5rem' }}>
-          <AuthFileList />
+          <AuthFileList filterType={selectedType} />
           <ProviderList />
         </div>
       </div>

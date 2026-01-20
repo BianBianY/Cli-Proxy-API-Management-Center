@@ -21,7 +21,7 @@ export function ProviderList() {
     setLoading(true);
     try {
       await fetchConfig(undefined, true);
-    } catch (err: any) {
+    } catch {
       showNotification(t('notification.refresh_failed'), 'error');
     } finally {
       setLoading(false);
@@ -69,7 +69,7 @@ export function ProviderList() {
         }
       }
       showNotification(t('notification.config_enabled'), 'success');
-    } catch (err: any) {
+    } catch {
       showNotification(t('notification.update_failed'), 'error');
     }
   };
@@ -95,6 +95,54 @@ export function ProviderList() {
     { title: 'Codex', type: 'codex', data: config?.codexApiKeys || [] },
   ];
 
+  // Render provider meta information
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const renderProviderMeta = (item: any, type: string) => {
+    const metaItems = [];
+
+    if (item.prefix) {
+      metaItems.push(
+        <span key="prefix">
+          {t('accounts.provider.prefix', { defaultValue: '前缀' })}: {item.prefix}
+        </span>
+      );
+    }
+
+    if (item.proxyUrl && (type === 'claude' || type === 'codex')) {
+      metaItems.push(
+        <span key="proxy">
+          {t('accounts.provider.proxy_url', { defaultValue: '代理' })}: {item.proxyUrl}
+        </span>
+      );
+    }
+
+    if (item.models && item.models.length > 0) {
+      metaItems.push(
+        <span key="models">
+          {t('accounts.provider.models_count', { defaultValue: '模型别名' })}: {item.models.length}
+        </span>
+      );
+    }
+
+    if (item.excludedModels && item.excludedModels.length > 0) {
+      metaItems.push(
+        <span key="excluded">
+          {t('accounts.provider.excluded_count', { defaultValue: '排除模型' })}: {item.excludedModels.length}
+        </span>
+      );
+    }
+
+    if (item.headers && Object.keys(item.headers).length > 0) {
+      metaItems.push(
+        <span key="headers">
+          {t('accounts.provider.headers_count', { defaultValue: '自定义头' })}: {Object.keys(item.headers).length}
+        </span>
+      );
+    }
+
+    return metaItems;
+  };
+
   return (
     <Card
       title={t('accounts.providers_title', { defaultValue: 'API 服务商' })}
@@ -108,13 +156,28 @@ export function ProviderList() {
             section.data.length > 0 && (
               <div key={section.type} className={styles.sectionGroup}>
                 <div className={styles.sectionTitle}>{section.title}</div>
+                {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                 {section.data.map((item: any, idx: number) => (
                   <div key={idx} className={styles.listItem}>
                     <div className={styles.itemInfo}>
-                      <div className={styles.itemName}>{item.apiKey?.substring(0, 8)}...</div>
+                      <div className={styles.itemName}>
+                        {item.apiKey?.substring(0, 8)}...
+                        {!isEnabled(item.excludedModels) && (
+                          <span className={styles.runtimeBadge}>
+                            {t('ai_providers.config_disabled_badge', { defaultValue: '已停用' })}
+                          </span>
+                        )}
+                      </div>
                       <div className={styles.itemMeta}>
                         {item.baseUrl && <span>{item.baseUrl}</span>}
                       </div>
+                      {renderProviderMeta(item, section.type).length > 0 && (
+                        <div className={styles.providerMeta}>
+                          {renderProviderMeta(item, section.type).map((meta, i) => (
+                            <span key={i}>{meta}{i < renderProviderMeta(item, section.type).length - 1 ? ' • ' : ''}</span>
+                          ))}
+                        </div>
+                      )}
                     </div>
                     <div className={styles.itemAction}>
                       <ToggleSwitch

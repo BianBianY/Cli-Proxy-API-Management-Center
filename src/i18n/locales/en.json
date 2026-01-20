@@ -95,7 +95,31 @@
     "usage_stats": "Usage Statistics",
     "config_management": "Config Management",
     "logs": "Logs Viewer",
-    "system_info": "Management Center Info"
+    "system_info": "Management Center Info",
+    "accounts": "Accounts"
+  },
+  "accounts": {
+    "description": "Centrally manage your auth files and API providers here.",
+    "auth_files_title": "Auth Files",
+    "providers_title": "API Providers",
+    "stats": {
+      "total_auth_files": "Total Auth Files",
+      "total_providers": "Provider Configs",
+      "enabled": "Enabled",
+      "disabled": "Disabled"
+    },
+    "auth_file": {
+      "provider": "Provider",
+      "auth_index": "Auth Index",
+      "runtime_only": "Runtime"
+    },
+    "provider": {
+      "prefix": "Prefix",
+      "proxy_url": "Proxy",
+      "models_count": "Model Aliases",
+      "excluded_count": "Excluded Models",
+      "headers_count": "Custom Headers"
+    }
   },
   "dashboard": {
     "title": "Dashboard",
