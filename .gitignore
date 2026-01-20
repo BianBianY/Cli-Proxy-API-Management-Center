@@ -30,3 +30,6 @@ settings.local.json
 *.njsproj
 *.sln
 *.sw?
+!/openspec/AGENTS.md
+/.tool-versions
+/.claude/
