@@ -430,7 +430,7 @@
     "prefix_placeholder": "",
     "proxy_url_placeholder": "socks5://username:password@proxy_ip:port/",
     "prefix_proxy_invalid_json": "该凭证文件不是 JSON 对象，无法编辑。",
-    "prefix_proxy_saved_success": "已更新 \"{{name}}\""
+    "prefix_proxy_saved_success": "已更新 \"{{name}}\"",
     "models_excluded_hint": "此模型已被 OAuth 排除",
     "status_update_success": "认证文件状态已更新：{{status}}",
     "status_update_failed": "更新状态失败",
